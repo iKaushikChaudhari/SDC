@@ -3,17 +3,31 @@
 
 
 typedef struct staff {
-int sid;
-char sname [30];
-char username [30];
-char password [30];
+int staffid;
+char staffname [30];
+char staffusername [30];
+char staffpassword [30];
+int staffno;
 } staff;
+
+struct courier{
+	int cid;
+	char sendname[30];
+	char address[100];
+	long mobileno;
+	char recivername[30];
+	int amount;
+	char status[10];
+	char exdate[10];
+	
+}Head=NULL;
 
 //Function declearation 
 void hidepassword();
 int validadmin();
 void registerstaff();
 int validstaff();
+int validadmin();
 //main function 
 int main()
 {
@@ -111,7 +125,11 @@ int main()
 					scanf("%d", &ch1);
 					switch(ch1)
 						{
-						
+							case 1:{
+								printf("Enter Courier Id");
+								scanf("%d",&courier.cid)
+								break;
+							}
 						}
 					}while(ch1!=0);
 				}
@@ -183,19 +201,31 @@ void registerstaff() {
 	staff s;
 	fflush(stdin);
 	printf ("\nEnter Staff ID : ");
-	scanf("%[^\n]s", s.sname);
+	scanf("%[^\n]s", s.staffid);
 	fflush(stdin);
 	printf ("\nEnter Staff Name : ");
-	scanf("%[^\n]s", s.sname);
-	fflush(stdin);
+	scanf("%[^\n]s", s.staffname);
 	printf("\nEnter Username: ");
-	scanf("%[^\n]s", s.username);
-	fflush(stdin);
+	scanf("%s", s.staffusername);
 	printf ("\nEnter Password : ");
-	hidepassword(s.password);
+	hidepassword(s.staffpassword);
+	FILE *fp = fopen ("staff.csv", "a+");
+	fprintf(fp,"%d, s, %s, %s, %ld, s, %s\n", s.staffno, s.staffid, s.staffname, s.staffusername, s.staffpassword);
+	fclose(fp);
 	printf("\n----------------------------------------------------");
 	printf("\nStaff Added Successfully\n");
 }
+
+int autoIncrement staffno () {
+	FILE *fp = fopen ("staff.csv","r");
+	int id= 0;
+	staff s;
+	while (fprintf(fp,"%d, s, %s, %s, %ld, s, %s\n", s.staffno, s.staffid, s.staffname, s.staffusername, s.staffpassword);
+	id= c.cid;
+}
+fclose(fp);
+return id+1;
+-}
 
 int validstaff(){
 	staff s;
@@ -213,4 +243,77 @@ int validstaff(){
 		}
 	else
 		return 0;
+}
+
+void addcourier(){
+	struct courier *last, *ptr;
+    int choice_add;
+    do
+    {
+        ptr = (struct courier *)malloc(sizeof(struct courier));
+        struct courier *last, *ptr;
+    int choice_add;
+    do
+    {
+//    	int cid;
+//	char sendname[30];
+//	char address[100];
+//	long mobileno;
+//	char recivername[30];
+//	int amount;
+//	char status[10];
+//	char exdate[10];
+        ptr = (struct courier *)malloc(sizeof(struct courier));
+        printf("Courier ID :");
+        scanf("%d", &ptr->cid);
+        printf("Customer Name :");
+        scanf("%s", &ptr->sendname);
+        printf("Address :");
+        scanf("%s", &ptr->address);
+        printf("mobileno :");
+        scanf("%ld", &ptr->mobileno);
+        printf("Reciver Name :");
+        scanf("%s", &ptr->recivername);
+        printf("Amount :");
+        scanf("%d", &ptr->amount);
+        printf("status :");
+        scanf("%s", &ptr->status);
+        printf("exdate :");
+        scanf("%s", &ptr->exdate);
+
+        ptr->next = NULL;
+        if (Head_Item == NULL)
+        {
+            Head_Item = ptr;
+        }
+        else
+        {
+            last = Head_Item;
+            while (last->next != NULL)
+            {
+                last = last->next;
+            }
+            last->next = ptr;
+        }
+        printf("\nIf you add one more Item (Press 0):");
+        scanf("%d", &choice_add);
+    } while (choice_add == 0);
+
+        ptr->next = NULL;
+        if (Head_Item == NULL)
+        {
+            Head_Item = ptr;
+        }
+        else
+        {
+            last = Head_Item;
+            while (last->next != NULL)
+            {
+                last = last->next;
+            }
+            last->next = ptr;
+        }
+        printf("\nIf you add one more Item (Press 0):");
+        scanf("%d", &choice_add);
+    } while (choice_add == 0);
 }
