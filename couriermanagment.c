@@ -9,16 +9,66 @@ char staffpassword [30];
 int staffno; 
 }staff;
 
-struct courier{
+typedef struct courier {
 	int cid;
-	char sendname[30];
+	char sender_name[30];
 	char address[100];
-	long mobileno;
-	char recivername[30];
+	long mobile_no;
+	int pincode;
+	char reciver_name[30];
 	int amount;
 	char status[10];
 	char exdate[10];
-}c;
+	struct courier*next;
+}courier;
+
+courier *head_courier = NULL, *current_courier = NULL;
+
+int autoIncrementcourier() {
+	int id=0;
+	for (current_courier = head_courier; current; current_courier = current_courier->next)
+	id = current_courier->cid;
+	return id+1;
+}
+
+void addcourier(){
+	courier c, *node;
+	system("cls");
+    printf("\n----------------------------------------------------");
+    printf("\n\t\tADD COURIER");
+    printf("\n----------------------------------------------------");
+	printf ("\nEnter Sender Name : ");
+	scanf("%s", &c.sender_name);
+	printf("\nEnter Address : ");
+	scanf("%s", &c.address);
+	printf ("\nEnter Contact Details : ");
+	scanf("%s", &c.mobile_no);
+	printf ("\nEnter Reciver Name: ");
+	scanf("%s", &c.reciver_name);
+	printf ("\nEnter Total Amont In INR: ");
+	scanf("%s", &c.amount);
+	
+	node=(courier*)malloc(sizeoff(courier));
+	node->cid = autoIncrement courier ();
+	strcpy (node->sender_name, c.sender_name);
+	strcpy (node->address, c.address);
+	strcpy (node->mobile_no, c.mobile_no);
+	strcpy (node->reciver_name, c.reciver_name);
+	node->amount, c.amount;
+	node->next=NULL;
+	
+	if (head_courier==NULL){
+		head_courier=NULL;
+	}
+	else{
+		current_courier=head_courier;
+		while(current_courier->next!=NULL)
+			current_courier=current_courier -> next;
+		current_courier -> next=node;
+	}
+}
+
+
 
 //Function declearation 
 void hidepassword();
