@@ -1,14 +1,13 @@
 #include<stdio.h>
 #include<string.h>
 
-
 typedef struct staff {
 int staffid;
 char staffname [30];
 char staffusername [30];
 char staffpassword [30];
-int staffno;
-} staff;
+int staffno; 
+}staff;
 
 struct courier{
 	int cid;
@@ -19,8 +18,7 @@ struct courier{
 	int amount;
 	char status[10];
 	char exdate[10];
-	
-}Head=NULL;
+}c;
 
 //Function declearation 
 void hidepassword();
@@ -107,7 +105,27 @@ int main()
 				}
         	case 2:
         		{
-					if (validstaff()){
+        			int matched=0;
+        			char suser[30], pwd[30];
+					printf("\n----------------------------------------------------");
+					printf("\n\t\tLogin Menu");
+					printf("\n----------------------------------------------------");	
+					printf("\nEnter Username: ");
+					scanf("%s",&suser);
+					printf("\nEnter Password: ");
+					hidepassword(pwd);
+					FILE*fp=fopen("staff.csv","r");
+					staff s1;
+					printf("\n----------------------------------------------------");
+					while (fscanf(fp,"%s %s %s %s\n", s1.staffid, s1.staffname, s1.staffusername, s1.staffpassword)!=EOF){
+						//decrypt(s1.staffpassword,0xAED);
+						if(strcmp(s1.staffusername,suser)==0 && strcmp(s1.staffpassword,pwd)==0){
+							matched=1;
+							break;
+						}
+					}
+					fclose(fp);
+					if(matched==1){
 					do {
 					system("cls");
 					printf("\n----------------------------------------------------");
@@ -127,7 +145,7 @@ int main()
 						{
 							case 1:{
 								printf("Enter Courier Id");
-								scanf("%d",&courier.cid)
+								//scanf("%d",&courier.cid);
 								break;
 							}
 						}
@@ -199,33 +217,36 @@ void hidepassword(char password[])
 
 void registerstaff() {
 	staff s;
-	fflush(stdin);
 	printf ("\nEnter Staff ID : ");
-	scanf("%[^\n]s", s.staffid);
-	fflush(stdin);
+	scanf("%s", &s.staffid);
 	printf ("\nEnter Staff Name : ");
-	scanf("%[^\n]s", s.staffname);
-	printf("\nEnter Username: ");
-	scanf("%s", s.staffusername);
-	printf ("\nEnter Password : ");
+	scanf("%s", &s.staffname);
+	printf("\nCreate Username: ");
+	scanf("%s", &s.staffusername);
+	printf ("\nCreate Password : ");
 	hidepassword(s.staffpassword);
+	//encrypt (s.staffpassword,0xAED);
+	
+	//s.staffno=autoIncrementstaffno();
 	FILE *fp = fopen ("staff.csv", "a+");
-	fprintf(fp,"%d, s, %s, %s, %ld, s, %s\n", s.staffno, s.staffid, s.staffname, s.staffusername, s.staffpassword);
+	fprintf(fp,"%s %s %s %s\n", &s.staffid, &s.staffname, &s.staffusername, &s.staffpassword);
 	fclose(fp);
 	printf("\n----------------------------------------------------");
 	printf("\nStaff Added Successfully\n");
 }
 
-int autoIncrement staffno () {
+/*
+int autoIncrementstaffno() {
 	FILE *fp = fopen ("staff.csv","r");
-	int id= 0;
+	int sno= 0;
 	staff s;
-	while (fprintf(fp,"%d, s, %s, %s, %ld, s, %s\n", s.staffno, s.staffid, s.staffname, s.staffusername, s.staffpassword);
-	id= c.cid;
+	while (fprintf(fp,"%s %s %s %s %s\n", &s.staffno, &s.staffid, &s.staffname, &s.staffusername, &s.staffpassword)!=EOF){
+	sno= s.staffno;
+	}
+	fclose(fp);
+	return sno+1;
 }
-fclose(fp);
-return id+1;
--}
+*/
 
 int validstaff(){
 	staff s;
@@ -238,82 +259,19 @@ int validstaff(){
 	printf("\nEnter Password: ");
 	hidepassword(pwd);
 	printf("\n----------------------------------------------------");
-	if (strcmp(suser,s.username) == 0 && strcmp (pwd,s.password)==0){
-		return 1;
-		}
-	else
-		return 0;
+	
+}
+/*
+void encrypt (char password [], int key) {
+	for(int i=0; i<strlen(password); i++) {
+		password[i] = password[i] - key;
+	}
 }
 
-void addcourier(){
-	struct courier *last, *ptr;
-    int choice_add;
-    do
-    {
-        ptr = (struct courier *)malloc(sizeof(struct courier));
-        struct courier *last, *ptr;
-    int choice_add;
-    do
-    {
-//    	int cid;
-//	char sendname[30];
-//	char address[100];
-//	long mobileno;
-//	char recivername[30];
-//	int amount;
-//	char status[10];
-//	char exdate[10];
-        ptr = (struct courier *)malloc(sizeof(struct courier));
-        printf("Courier ID :");
-        scanf("%d", &ptr->cid);
-        printf("Customer Name :");
-        scanf("%s", &ptr->sendname);
-        printf("Address :");
-        scanf("%s", &ptr->address);
-        printf("mobileno :");
-        scanf("%ld", &ptr->mobileno);
-        printf("Reciver Name :");
-        scanf("%s", &ptr->recivername);
-        printf("Amount :");
-        scanf("%d", &ptr->amount);
-        printf("status :");
-        scanf("%s", &ptr->status);
-        printf("exdate :");
-        scanf("%s", &ptr->exdate);
-
-        ptr->next = NULL;
-        if (Head_Item == NULL)
-        {
-            Head_Item = ptr;
-        }
-        else
-        {
-            last = Head_Item;
-            while (last->next != NULL)
-            {
-                last = last->next;
-            }
-            last->next = ptr;
-        }
-        printf("\nIf you add one more Item (Press 0):");
-        scanf("%d", &choice_add);
-    } while (choice_add == 0);
-
-        ptr->next = NULL;
-        if (Head_Item == NULL)
-        {
-            Head_Item = ptr;
-        }
-        else
-        {
-            last = Head_Item;
-            while (last->next != NULL)
-            {
-                last = last->next;
-            }
-            last->next = ptr;
-        }
-        printf("\nIf you add one more Item (Press 0):");
-        scanf("%d", &choice_add);
-    } while (choice_add == 0);
+void decrypt (char staffpassword [], int key) {
+	for (int i=0; i<strlen (staffpassword); i++) {
+		staffpassword[i] = staffpassword [i]+ key;
+	}
 }
+*/
+
